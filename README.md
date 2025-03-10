@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+Web3 Authentication App 🚀
+A React & Express.js application that implements Web3 login authorization using smart contracts and NFTs to differentiate user roles (Member, Intern, Manager). Users sign in with their crypto wallets instead of traditional credentials.
+⚡ Tech Stack
+Frontend: React.js, React Router, Styled-Components
+Backend: Node.js, Express.js, CORS
+Web3: ethers.js, MetaMask Integration
+Version Control: GitHub
+Smart Contracts (Upcoming): Solidity, Hardhat
+🚀 Setup & Installation
+1️⃣ Clone the Repository
+git clone https://github.com/your-username/your-repo.git
+cd web3_auth_app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+2️⃣ Install Dependencies
+Frontend
 
-## Available Scripts
+cd frontend
+npm install
 
-In the project directory, you can run:
+Backend
 
-### `npm start`
+cd ../backend
+npm install
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🎯 Running the App
+1️⃣ Start the Backend
+cd backend
+node server.js
+Backend runs on http://localhost:5000/
 
-### `npm test`
+2️⃣ Start the Frontend
+cd ../frontend
+npm start
+Frontend runs on http://localhost:3000/
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3️⃣ Run Both Frontend & Backend Simultaneously
+From the root directory (web3_auth_app), run:
 
-### `npm run build`
+npm install --save-dev concurrently
+npm start
+This will start both the backend (5000) and frontend (3000) at the same time.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🔑 Web3 Authentication Flow
+User connects their MetaMask wallet.
+The app verifies the wallet address.
+Based on NFT ownership, the system assigns roles (Member, Intern, Manager).
+User gets access to features based on their role.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+🛠 Environment Variables (.env)
+Inside the backend directory, create a .env file:
+PORT=5000
+INFURA_API_KEY=your_infura_key
+PRIVATE_KEY=your_wallet_private_key
+Replace with your actual credentials.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+📝 Future Features
+✅ Wallet Authentication (MetaMask)
+✅ React & Express Setup
+🔄 Smart Contract Integration (Upcoming)
+🔄 NFT-Based Role Assignment
+🔄 Dashboard UI for Role Management
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+👥 Contributors
+Sonbom Lee - https://github.com/SilXe
