@@ -3,23 +3,22 @@ import React, { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [address, setAddress] = useState(null);      // Wallet address
-  const [role, setRole] = useState(null);            // NFT role (member, intern, manager)
+  const [user, setUser] = useState(null);  // Store user data (address)
 
-  const login = async (walletAddress, userRole) => {
-    setAddress(walletAddress);
-    setRole(userRole);
+  // Login function
+  const login = (userData) => {
+    setUser(userData);  // Set user data when logging in
   };
 
+  // Logout function
   const logout = () => {
-    setAddress(null);
-    setRole(null);
+    setUser(null);  // Reset user data when logging out
   };
 
-  const isAuthenticated = !!address;
+  const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ address, role, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
