@@ -1,55 +1,33 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePage';     // Dashboard
 import ProfilePage from './pages/ProfilePage';
-import ProtectedRoute from './components/ProtectedRoute';
-import MainLayout from './layouts/MainLayout';
-import AuthLayout from './layouts/AuthLayout';
-import PublicLayout from './layouts/PublicLayout';
 
-const AppRouter = () => {
+const Router = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <PublicLayout>
-            <LandingPage />
-          </PublicLayout>
-        }
-      />
-      <Route
-        path="/login"
-        element={
-          <AuthLayout>
-            <LoginPage />
-          </AuthLayout>
-        }
-      />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      
       <Route
         path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <MainLayout>
-              <HomePage />
-            </MainLayout>
-          </ProtectedRoute>
-        }
+        element={isAuthenticated ? <HomePage /> : <Navigate to="/login" />}
       />
+      
       <Route
         path="/profile"
-        element={
-          <ProtectedRoute>
-            <MainLayout>
-              <ProfilePage />
-            </MainLayout>
-          </ProtectedRoute>
-        }
+        element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />}
       />
+      
+      {/* Catch-all fallback */}
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };
 
-export default AppRouter;
+export default Router;
