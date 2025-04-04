@@ -1,26 +1,48 @@
 Web3 Authentication App 
 
-A React & Express.js application that implements Web3 login authorization using smart contracts and NFTs to differentiate user roles (Member, Intern, Manager). Users sign in with their crypto wallets instead of traditional credentials.
+This is a decentralized login and authorization platform built with Web3 technologies. Instead of traditional username/password credentials, users authenticate using their crypto wallets. Smart contracts and NFTs are used to differentiate user roles such as **Member**, **Manager**, and **Admin**. The app automatically detects wallet connection and adapts the UI accordingly (e.g., login/logout button, page routing, and profile access).
 
-  Tech Stack
+## Features
 
-  Frontend: React.js, React Router, Styled-Components
+- Wallet-based login (connect and disconnect)
+- Automatic navigation to dashboard on wallet connection
+- Access-controlled pages based on login state
+- NFT-based user role authorization (WIP)
+- Smart contract backend using Hardhat (migrated from Remix)
+- Celo Alfajores testnet support
 
-  Backend: Node.js, Express.js, CORS
+## Tech Stack
 
-  Web3: ethers.js, MetaMask Integration
+Frontend:
+- React
+- Vite
+- Ethers.js
+- RainbowKit + Wagmi
+- TailwindCSS
+- React Router
 
-  Version Control: GitHub
+Backend:
+- Hardhat (for smart contract development and testing)
+- Solidity
+- Celo Alfajores Testnet
 
-  Smart Contracts (Upcoming): Solidity, Hardhat
+## Prerequisites
 
- Setup & Installation
+- Node.js (v18+ recommended)
+- Git
+- Metamask or compatible crypto wallet
+- Celo Alfajores testnet configured in wallet
+
+## Setup & Installation
 
   1. Clone the Repository
-  git clone https://github.com/your-username/your-repo.git
-  cd web3_auth_app
+
+           git clone https://github.com/your-username/your-repo.git
+
+           cd web3_auth_app
 
   2️ Install Dependencies
+  
   Frontend
 
     cd frontend
@@ -32,61 +54,33 @@ A React & Express.js application that implements Web3 login authorization using 
 
     npm install
 
+  Smart Contract
+  
+    cd ../smart-contracts
+    npm install
 
  Running the App
 
   1️ Start the Backend
-    cd backend
-    node server.js
+  
+      cd backend
+      node server.js
+
+    
   Backend runs on http://localhost:5000/
 
   2️ Start the Frontend
-    cd ../frontend
-    npm start
+  
+      cd ../frontend
+      npm start
+
+    
   Frontend runs on http://localhost:3000/
 
-  3️ Run Both Frontend & Backend Simultaneously
-    From the root directory (web3_auth_app), run:
+Compile Smart Contracts
 
-    npm install --save-dev concurrently
-
-    npm start
-
-  This will start both the backend (5000) and frontend (3000) at the same time.
-
- Web3 Authentication Flow
-
-  User connects their MetaMask wallet.
-
-  The app verifies the wallet address.
-
-  Based on NFT ownership, the system assigns roles (Member, Intern, Manager).
-
-  User gets access to features based on their role.
-
- Environment Variables (.env)
-
-  Inside the backend directory, create a .env file:
-
-    PORT=5000
-
-    INFURA_API_KEY=your_infura_key
-
-    PRIVATE_KEY=your_wallet_private_key
-
-  Replace with your actual credentials.
-
-** Future Features**
-
-   Wallet Authentication (Coinbase, Celo)
-
-   React & Express Setup
-
-   Smart Contract Integration (Upcoming)
-
-   NFT-Based Role Assignment
-
-   Dashboard UI for Role Management
+      cd ../smart-contracts
+      npx hardhat compile
 
  Contributors
 
