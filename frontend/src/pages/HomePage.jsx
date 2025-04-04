@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../HomePage.css';
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contractInfo';
+import { ethers } from 'ethers';
 
 const HomePage = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -22,6 +24,38 @@ const HomePage = () => {
     navigate('/');
     logout();
   };
+
+  const getMetaMaskProvider = () => {
+    if (window.ethereum?.providers) {
+      return window.ethereum.providers.find((p) => p.isMetaMask);
+    } else if (window.ethereum?.isMetaMask) {
+      return window.ethereum;
+    } else {
+      return null;
+    }
+  };
+
+const handleMintNFT = async () => {
+  try {
+    const metaMaskProvider = getMetaMaskProvider();
+    if (!metaMaskProvider) {
+      alert("MetaMask not found.");
+      return;
+    }
+
+    const provider = new ethers.BrowserProvider(metaMaskProvider);
+    const signer = await provider.getSigner();
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+    const tx = await contract.mint();
+    await tx.wait();
+
+    alert("✅ NFT minted successfully!");
+  } catch (err) {
+    console.error("❌ Mint failed:", err);
+    alert("Failed to mint NFT. See console for details.");
+  }
+};
 
   return (
     <div className="home-page-container">
@@ -66,6 +100,22 @@ const HomePage = () => {
             </div>
           )}
         </section>
+
+        <button
+          onClick={handleMintNFT}
+          style={{
+            marginTop: '2rem',
+            padding: '0.75rem 1.5rem',
+            backgroundColor: '#10b981',
+            color: 'white',
+            fontSize: '1rem',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+          }}
+        >
+          Mint Test NFT
+        </button>
       </div>
     </div>
   );
