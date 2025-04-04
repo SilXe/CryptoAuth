@@ -45,6 +45,31 @@ const LoginPage = () => {
     }
   };
 
+  const handleMetaMaskLogin = async () => {
+    try {
+      let ethereum;
+  
+      // Use MetaMask explicitly if multiple providers are injected
+      if (window.ethereum?.providers) {
+        ethereum = window.ethereum.providers.find((p) => p.isMetaMask);
+      } else if (window.ethereum?.isMetaMask) {
+        ethereum = window.ethereum;
+      } else {
+        alert('MetaMask is not available.');
+        return;
+      }
+  
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const address = accounts[0];
+  
+      login({ address, role: 'Member' });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('❌ MetaMask connection error:', error);
+      alert('Failed to connect MetaMask. Check console for error.');
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/');  // Redirect to Landing page
@@ -52,7 +77,7 @@ const LoginPage = () => {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Top center CryptoAuth button */}
+      {/* Top Center: CryptoAuth Logo/Button */}
       <div style={{ textAlign: 'center', padding: '2rem 1rem 0.5rem' }}>
         <button
           onClick={handleGoToLanding}
@@ -68,26 +93,49 @@ const LoginPage = () => {
           CryptoAuth
         </button>
       </div>
-  
-      {/* Centered login box */}
-      <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-start', paddingTop: '1rem'  }}>
+
+      {/* Center Section: Login Buttons */}
+      <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-start', paddingTop: '1rem' }}>
         <div style={{ textAlign: 'center' }}>
           <h2>{isAuthenticated ? `Welcome, ${user}` : 'Login'}</h2>
-  
-          <button
-            onClick={isAuthenticated ? handleLogout : handleConnect}
-            style={{
-              padding: '0.75rem 1.5rem',
-              backgroundColor: '#4f46e5',
-              color: 'white',
-              fontSize: '1rem',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: 'pointer',
-            }}
-          >
-            {isAuthenticated ? 'Log Out' : isConnecting ? 'Connecting...' : 'Connect Coinbase Wallet'}
-          </button>
+
+          {/* Group Coinbase and MetaMask buttons in a vertical stack */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* 🔵 Coinbase Wallet */}
+            <button
+              onClick={isAuthenticated ? handleLogout : handleConnect}
+              style={{
+                padding: '0.75rem 1.5rem',
+                backgroundColor: '#4f46e5',
+                color: 'white',
+                fontSize: '1rem',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                marginBottom: '1.5rem', // spacing between the two buttons
+              }}
+            >
+              {isAuthenticated ? 'Log Out' : isConnecting ? 'Connecting...' : 'Connect Coinbase Wallet'}
+            </button>
+
+            {/* 🟠 MetaMask Wallet */}
+            {!isAuthenticated && (
+              <button
+                onClick={handleMetaMaskLogin}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#f6851b',
+                  color: 'white',
+                  fontSize: '1rem',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                }}
+              >
+                Connect to MetaMask
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
