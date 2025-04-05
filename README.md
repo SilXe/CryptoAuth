@@ -82,6 +82,13 @@ Compile Smart Contracts
       cd ../smart-contracts
       npx hardhat compile
 
+## Notification / Alert
+    This project is in active development.
+
+    Role-based NFT logic and backend integration are WIP.
+
+    Make sure your wallet is connected to the Celo Alfajores testnet.
+
  Contributors
 
   Sonbom Lee - https://github.com/SilXe
