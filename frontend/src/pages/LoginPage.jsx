@@ -32,8 +32,10 @@ const LoginPage = () => {
       const accounts = await provider.send('eth_requestAccounts', []);
       const address = accounts[0];
 
+      const signer = await provider.getSigner();
+
       // Set the logged-in user
-      login(address);
+      login({ walletAddress: address, role: 'Member', provider: signer.provider });
 
       // Navigate to Dashboard automatically
       navigate('/dashboard');
@@ -62,11 +64,14 @@ const LoginPage = () => {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const address = accounts[0];
   
-      login({ address, role: 'Member' });
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('❌ MetaMask connection error:', error);
-      alert('Failed to connect MetaMask. Check console for error.');
+
+      login({ walletAddress: address, role: 'Member', provider: signer.provider });
+  
+    } catch (err) {
+      console.error('❌ MetaMask connection error:', err);
+      alert('MetaMask connect failed. See console for details.');
+    } finally {
+      setIsConnecting(false);
     }
   };
 

@@ -35,33 +35,11 @@ const HomePage = () => {
     }
   };
 
-const handleMintNFT = async () => {
-  try {
-    const metaMaskProvider = getMetaMaskProvider();
-    if (!metaMaskProvider) {
-      alert("MetaMask not found.");
-      return;
-    }
-
-    const provider = new ethers.BrowserProvider(metaMaskProvider);
-    const signer = await provider.getSigner();
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-    const tx = await contract.mint();
-    await tx.wait();
-
-    alert("✅ NFT minted successfully!");
-  } catch (err) {
-    console.error("❌ Mint failed:", err);
-    alert("Failed to mint NFT. See console for details.");
-  }
-};
-
   return (
     <div className="home-page-container">
       <header className="home-page-header">
         <div className="logo">CryptoAuth</div>
-        <div className="wallet-address">{user.address}</div>
+        <div className="wallet-address">{user.walletAddress}</div>
         <button className="logout-button" onClick={handleLogout}>Log Out</button>
       </header>
 
@@ -101,21 +79,6 @@ const handleMintNFT = async () => {
           )}
         </section>
 
-        <button
-          onClick={handleMintNFT}
-          style={{
-            marginTop: '2rem',
-            padding: '0.75rem 1.5rem',
-            backgroundColor: '#10b981',
-            color: 'white',
-            fontSize: '1rem',
-            border: 'none',
-            borderRadius: '8px',
-            cursor: 'pointer',
-          }}
-        >
-          Mint Test NFT
-        </button>
       </div>
     </div>
   );
