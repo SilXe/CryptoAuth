@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { uploadToNFTStorage } from '../lib/nftUploader';
+import { uploadToPinata } from '../lib/pinataUploader';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contractInfo';
 import { ethers } from 'ethers';
 import { useNavigate } from 'react-router-dom';
@@ -24,13 +24,12 @@ const SignUpPage = () => {
       const emailHash = ethers.keccak256(ethers.toUtf8Bytes(formData.email));
 
       // Upload metadata with hashed values
-      const metadataUrl = await uploadToNFTStorage({
+      const metadataUrl = await uploadToPinata({
         name: formData.name,
-        emailHash,
-        imageFile: new Blob([''], { type: 'image/png' }) // optional placeholder
+        email: formData.email
       });
 
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = user.provider
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 

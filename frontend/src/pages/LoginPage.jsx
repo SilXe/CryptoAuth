@@ -40,8 +40,10 @@ const LoginPage = () => {
       const accounts = await provider.send('eth_requestAccounts', []);
       const address = accounts[0];
 
+      const signer = await provider.getSigner();
+
       // Set the logged-in user
-      login({ walletAddress: address, role: 'Member' }, provider);
+      login({ walletAddress: address, role: 'Member', provider: signer.provider });
 
       // Navigate to Dashboard automatically
       // navigate('/dashboard'); ** Now needs to wait for the nft check **
@@ -104,7 +106,7 @@ const LoginPage = () => {
       const network = await provider.getNetwork();
       console.log('🧠 Connected network:', network);
   
-      login({ walletAddress: address, role: 'Member'}, provider);
+      login({ walletAddress: address, role: 'Member', provider: signer.provider });
   
     } catch (err) {
       console.error('❌ MetaMask connection error:', err);
