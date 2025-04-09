@@ -1,6 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contractInfo';
-import { ethers } from 'ethers';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 

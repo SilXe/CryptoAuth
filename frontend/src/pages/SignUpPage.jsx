@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { uploadToPinata } from '../lib/pinataUploader';
@@ -5,11 +6,16 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contractInfo';
 import { ethers } from 'ethers';
 import { useNavigate } from 'react-router-dom';
 
-const SignUpPage = () => {
-  const { user } = useAuth();
-  const [formData, setFormData] = useState({ name: '', email: '' });
-  const [isMinting, setIsMinting] = useState(false);
-  const navigate = useNavigate();
+
+const handleSignUp = async () => {
+  const imageFile = selectedFile; // from <input type="file" />
+  const emailHash = sha256(email); // or however you hash it
+  const metadataUrl = await uploadToNFTStorage({
+    name: preferredName,
+    emailHash,
+    imageFile,
+  });
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -123,5 +129,3 @@ const SignUpPage = () => {
     </div>
   );
 };
-
-export default SignUpPage;
