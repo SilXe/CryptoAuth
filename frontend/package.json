@@ -11,7 +11,6 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.8.2",
     "ethers": "^6.13.5",
-    "nft.storage": "^7.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",
