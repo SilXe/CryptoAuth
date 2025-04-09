@@ -2,16 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { CoinbaseWalletSDK } from '@coinbase/wallet-sdk';
-import { BrowserProvider } from 'ethers';
+import { BrowserProvider, ethers } from 'ethers';
 
 const LoginPage = () => {
   const [isConnecting, setIsConnecting] = useState(false);
-  const { user, login, logout, isAuthenticated } = useAuth();
+  const { user, login, logout, isAuthenticated, hasNFT } = useAuth();
   const navigate = useNavigate();
 
   const handleGoToLanding = () => {
     navigate('/');
   };
+
+  useEffect(() => {
+    if (isAuthenticated && hasNFT === false) {
+      navigate('/signup');
+    } else if (isAuthenticated && hasNFT === true) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, hasNFT, navigate]);
 
   const handleConnect = async () => {
     try {
@@ -32,11 +40,13 @@ const LoginPage = () => {
       const accounts = await provider.send('eth_requestAccounts', []);
       const address = accounts[0];
 
+      const signer = await provider.getSigner();
+
       // Set the logged-in user
-      login(address);
+      login({ walletAddress: address, role: 'Member', provider: signer.provider });
 
       // Navigate to Dashboard automatically
-      navigate('/dashboard');
+      // navigate('/dashboard'); ** Now needs to wait for the nft check **
     } catch (error) {
       console.error('❌ Wallet connection error:', error);
       alert('Failed to connect wallet. Check console for error.');
@@ -47,28 +57,65 @@ const LoginPage = () => {
 
   const handleMetaMaskLogin = async () => {
     try {
-      let ethereum;
+      setIsConnecting(true);
   
-      // Use MetaMask explicitly if multiple providers are injected
-      if (window.ethereum?.providers) {
-        ethereum = window.ethereum.providers.find((p) => p.isMetaMask);
-      } else if (window.ethereum?.isMetaMask) {
-        ethereum = window.ethereum;
-      } else {
-        alert('MetaMask is not available.');
+      let ethereum = window.ethereum;
+  
+      if (window.ethereum?.providers?.length) {
+        ethereum = window.ethereum.providers.find(p => p.isMetaMask);
+      }
+  
+      if (!ethereum || !ethereum.isMetaMask) {
+        alert('MetaMask not detected');
         return;
       }
   
-      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-      const address = accounts[0];
+      try {
+        // Try to switch first
+        await ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0xaef3' }]
+        });
+      } catch (switchError) {
+        // If not added, try to add it
+        if (switchError.code === 4902) {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: '0xaef3',
+              chainName: 'Celo Alfajores Testnet',
+              nativeCurrency: {
+                name: 'Celo',
+                symbol: 'CELO',
+                decimals: 18
+              },
+              rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
+              blockExplorerUrls: ['https://explorer.celo.org/alfajores']
+            }]
+          });
+        } else {
+          throw switchError;
+        }
+      }
   
-      login({ address, role: 'Member' });
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('❌ MetaMask connection error:', error);
-      alert('Failed to connect MetaMask. Check console for error.');
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const provider = new ethers.BrowserProvider(ethereum);
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
+
+      const network = await provider.getNetwork();
+      console.log('🧠 Connected network:', network);
+  
+      login({ walletAddress: address, role: 'Member', provider: signer.provider });
+  
+    } catch (err) {
+      console.error('❌ MetaMask connection error:', err);
+      alert('MetaMask connect failed. See console for details.');
+    } finally {
+      setIsConnecting(false);
     }
   };
+  
 
   const handleLogout = () => {
     logout();
