@@ -6,7 +6,7 @@ import { BrowserProvider } from 'ethers';
 
 const LoginPage = () => {
   const [isConnecting, setIsConnecting] = useState(false);
-  const { user, login, logout, isAuthenticated } = useAuth();
+  const { user, login, logout, isAuthenticated, hasNFT } = useAuth();
   const navigate = useNavigate();
 
   const handleGoToLanding = () => {
@@ -38,7 +38,7 @@ const LoginPage = () => {
       login({ walletAddress: address, role: 'Member', provider: signer.provider });
 
       // Navigate to Dashboard automatically
-      navigate('/dashboard');
+      // navigate('/dashboard');
     } catch (error) {
       console.error('❌ Wallet connection error:', error);
       alert('Failed to connect wallet. Check console for error.');
@@ -63,7 +63,9 @@ const LoginPage = () => {
   
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const address = accounts[0];
-  
+
+      const provider = new BrowserProvider(ethereum);
+      const signer = await provider.getSigner();
 
       login({ walletAddress: address, role: 'Member', provider: signer.provider });
   
@@ -79,6 +81,15 @@ const LoginPage = () => {
     logout();
     navigate('/');  // Redirect to Landing page
   };
+
+  useEffect(() => {
+    if (isAuthenticated && hasNFT === true) {
+      navigate('/dashboard');
+    } else if (isAuthenticated && hasNFT === false) {
+      navigate('/signup');
+    }
+  }, [isAuthenticated, hasNFT]);
+  
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

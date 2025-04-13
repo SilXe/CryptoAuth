@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { uploadToPinata } from '../lib/pinataUploader';
@@ -6,16 +5,11 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contractInfo';
 import { ethers } from 'ethers';
 import { useNavigate } from 'react-router-dom';
 
-
-const handleSignUp = async () => {
-  const imageFile = selectedFile; // from <input type="file" />
-  const emailHash = sha256(email); // or however you hash it
-  const metadataUrl = await uploadToNFTStorage({
-    name: preferredName,
-    emailHash,
-    imageFile,
-  });
-
+const SignUpPage = () => {
+  const { user } = useAuth();
+  const [formData, setFormData] = useState({ name: '', email: '' });
+  const [isMinting, setIsMinting] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,15 +25,14 @@ const handleSignUp = async () => {
 
       // Upload metadata with hashed values
       const metadataUrl = await uploadToPinata({
-        name: formData.name,
-        email: formData.email
+        name: nameHash,
+        email: emailHash,
       });
 
-      const provider = user.provider
+      const provider = user.provider;
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-      // Mint the NFT with the tokenURI
       const tx = await contract.mint(metadataUrl);
       await tx.wait();
 
@@ -129,3 +122,5 @@ const handleSignUp = async () => {
     </div>
   );
 };
+
+export default SignUpPage;

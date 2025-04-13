@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../HomePage.css';
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contractInfo';
-import { ethers } from 'ethers';
+
 
 const HomePage = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -23,16 +22,6 @@ const HomePage = () => {
   const handleLogout = () => {
     navigate('/');
     logout();
-  };
-
-  const getMetaMaskProvider = () => {
-    if (window.ethereum?.providers) {
-      return window.ethereum.providers.find((p) => p.isMetaMask);
-    } else if (window.ethereum?.isMetaMask) {
-      return window.ethereum;
-    } else {
-      return null;
-    }
   };
 
   return (
