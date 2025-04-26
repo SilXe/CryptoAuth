@@ -19,14 +19,28 @@ const SignUpPage = () => {
     try {
       setIsMinting(true);
 
-      // Hash name and email
-      const nameHash = ethers.keccak256(ethers.toUtf8Bytes(formData.name));
-      const emailHash = ethers.keccak256(ethers.toUtf8Bytes(formData.email));
+      // Request backend to hash name and email with private salt
+      const response = await fetch("http://localhost:5000/api/hash-metadata", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+        }),
+      });
+
+      const { hashedName, hashedEmail } = await response.json();
+
+      console.log("hashedName: ", hashedName);
+      console.log("hashedEmail: ", hashedEmail);
 
       // Upload metadata with hashed values
       const metadataUrl = await uploadToPinata({
-        name: nameHash,
-        email: emailHash,
+        name: hashedName,
+        email: hashedEmail,
+        role: user.role
       });
 
       const provider = user.provider;

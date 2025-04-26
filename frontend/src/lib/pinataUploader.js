@@ -4,20 +4,19 @@ import { ethers } from 'ethers';
 const API_KEY = process.env.REACT_APP_PINATA_API_KEY;
 const API_SECRET = process.env.REACT_APP_PINATA_SECRET;
 
-export const uploadToPinata = async ({ name, email }) => {
+export const uploadToPinata = async ({ name, email, role }) => {
   try {
-    const hashedName = ethers.keccak256(ethers.toUtf8Bytes(name));
-    const hashedEmail = ethers.keccak256(ethers.toUtf8Bytes(email));
-
     const metadata = {
       name: 'CryptoAuth NFT',
       description: 'Identity-bound access NFT',
       attributes: [
-        { trait_type: 'Hashed Name', value: hashedName },
-        { trait_type: 'Hashed Email', value: hashedEmail },
-        { trait_type: 'Role', value: 'Member' }
+        { trait_type: 'Hashed Name', value: name },
+        { trait_type: 'Hashed Email', value: email },
+        { trait_type: 'Role', value: role }
       ]
     };
+
+    console.log("attributes: ", metadata.attributes);
 
     const res = await axios.post(
       'https://api.pinata.cloud/pinning/pinJSONToIPFS',

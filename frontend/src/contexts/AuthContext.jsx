@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // { walletAddress, role }
+  const [user, setUser] = useState(null); // { walletAddress, role, provider }
   const [hasNFT, setHasNFT] = useState(null); // null = not checked yet
 
   const isAuthenticated = !!user;
