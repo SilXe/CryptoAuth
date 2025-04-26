@@ -1,86 +1,117 @@
-Web3 Authentication App 
+# CryptoAuth
 
-This is a decentralized login and authorization platform built with Web3 technologies. Instead of traditional username/password credentials, users authenticate using their crypto wallets. Smart contracts and NFTs are used to differentiate user roles such as **Member**, **Manager**, and **Admin**. The app automatically detects wallet connection and adapts the UI accordingly (e.g., login/logout button, page routing, and profile access).
+## Project Overview
 
-## Features
+CryptoAuth is a decentralized identity and authorization system built on Web3 principles.
+It uses NFTs as proof of user registration and role management, integrating secure salted hashing to bind user identity while preserving privacy.
 
-- Wallet-based login (connect and disconnect)
-- Automatic navigation to dashboard on wallet connection
-- Access-controlled pages based on login state
-- NFT-based user role authorization (WIP)
-- Smart contract backend using Hardhat (migrated from Remix)
-- Celo Alfajores testnet support
+Through CryptoAgility, CryptoAuth is designed to future-proof cryptographic security, enabling easy upgrades of hashing algorithms as new standards emerge.
 
-## Tech Stack
+No centralized databases are used — all critical user information is cryptographically hashed, pinned to IPFS, and verified securely at runtime.
 
-Frontend:
-- React
-- Vite
-- Ethers.js
-- RainbowKit + Wagmi
-- TailwindCSS
-- React Router
+## Motivation
 
-Backend:
-- Hardhat (for smart contract development and testing)
-- Solidity
-- Celo Alfajores Testnet
+Today’s applications heavily rely on centralized servers to store user identity and access control data.
+This leads to risks like:
+- Single point of failure
+- Data breaches
+- Vendor lock-in
+    
+CryptoAuth offers a Web3-native alternative:
+ - User identities are tied to NFTs
+ - Role metadata is securely hashed and decentralized
+ - Authentication is verified cryptographically without relying on backend storage
 
-## Prerequisites
+## Core Features
 
-- Node.js (v18+ recommended)
-- Git
-- Metamask or compatible crypto wallet
-- Celo Alfajores testnet configured in wallet
+- #### NFT-Based Identity:
+Each user mints a personalized NFT containing hashed metadata (name, email, role).
+ - #### CryptoAgility:
+The backend hashing logic supports multiple cryptographic algorithms (SHA-256, SHA3-256, etc.) and can be upgraded without systemic redesign.
+ - #### Private Salted Hashing:
+Name and email are salted and hashed using backend-only secrets, ensuring privacy while enabling secure verification.
+ - #### Fully Decentralized Storage:
+All user metadata is pinned to IPFS via Pinata, eliminating centralized database dependency.
+ - #### Role-Based Access:
+User roles (Member, Manager, Intern) are assigned at NFT mint time and validated during profile access.
+ - #### Secure Profile Verification:
+During login, user inputs are verified against NFT metadata using private backend hashing without exposing raw data.
 
-## Setup & Installation
+## How CryptoAuth Works (Flow)
 
-  1. Clone the Repository
+#### Sign Up
+ - User enters name and email.
+ - Frontend sends the raw data to the backend.
+ - Backend hashes the input with a private salt.
+ - Hashed metadata is pinned to IPFS.
+ - NFT is minted pointing to the IPFS metadata.
 
-           git clone https://github.com/your-username/your-repo.git
+#### Profile Access
+ - Connected wallet retrieves owned NFT metadata.
+ - User inputs name/email again for verification.
+ - Backend re-hashes and compares with stored hashes.
+ - If verified, user's real profile information is revealed.
 
-           cd web3_auth_app
+#### No Database Storage
+ - No sensitive user information is ever stored off-chain.
+ - Verification is fully cryptographic and decentralized.
 
-  2️ Install Dependencies
-  
-  Frontend
+## Architecture Overview
 
-    cd frontend
-    npm install
+      Layer                   |              Technology
+      Frontend                |              React.js
+      Backend                 |              Node.js, Express.js
+      Smart Contract          |              Solidity (ERC721 with URI Storage)
+      Storage                 |              IPFS (via Pinata)
+      Blockchain              |              Sui Blockchain (adaptable)
+      Wallet Integration      |              Ethers.js
 
-  Backend
+## How to Run Locally
+### Prerequisites
+ - Node.js (v18+)
+ - Yarn or npm
+ - Metamask / Sui Wallet extension installed
 
-    cd ../backend
+### Installation Steps
+      # Clone the repository
+      git clone https://github.com/your-username/cryptoauth.git
 
-    npm install
-
-  Smart Contract
-  
-    cd ../smart-contracts
-    npm install
-
- Running the App
-
-  1️ Start the Backend
-  
+      # Install backend dependencies
       cd backend
+      npm install
+
+      # Start backend server
       node server.js
 
-    
-  Backend runs on http://localhost:5000/
-
-  2️ Start the Frontend
-  
+      # Open new terminal, install frontend dependencies
       cd ../frontend
-      npm start
+      npm install
 
-    
-  Frontend runs on http://localhost:3000/
+      # Start frontend dev server
+      npm run start
 
-Compile Smart Contracts
+## Future Improvements
+ - Integration with Sui zkLogin for seamless OAuth identity bridging
+ - On-chain randomness for randomized role assignments
+ - Multisignature access control for NFT minting and role upgrades
+ - UI polish for dashboard views based on user role
+ - Deployment to testnet and mainnet after hackathon
+ - Integration with zk-SNARK for more privacy
 
-      cd ../smart-contracts
-      npx hardhat compile
+## Tech Stack
+ - React.js
+ - Node.js / Express.js
+ - Solidity Smart Contracts
+ - Sui Blockchain
+ - Pinata/IPFS Decentralized Storage
+ - Ethers.js
+ - Crypto module for backend hashing
+
+## Acknowledgements
+ - Sui Overflow 2025 Hackathon
+ - Pinata, Infura, and OpenZeppelin for critical infrastructure
+ - Sui Foundation
+ - Celo for NFT minting flow
 
 ## Notification / Alert
     This project is in active development.
@@ -89,6 +120,5 @@ Compile Smart Contracts
 
     Make sure your wallet is connected to the Celo Alfajores testnet.
 
- Contributors
-
+ ### Contributors
   Sonbom Lee - https://github.com/SilXe
