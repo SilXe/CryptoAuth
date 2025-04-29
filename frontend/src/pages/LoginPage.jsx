@@ -113,7 +113,15 @@ const LoginPage = () => {
       {/* Center Section: Login Buttons */}
       <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'flex-start', paddingTop: '1rem' }}>
         <div style={{ textAlign: 'center' }}>
-          <h2>{isAuthenticated ? `Welcome, ${user}` : 'Login'}</h2>
+          <h2
+            style={{
+              fontSize: '1.75rem', // Larger than button font
+              fontWeight: 'bold',
+              marginBottom: '2rem', // Larger spacing before first button
+            }}
+          >
+            {isAuthenticated ? `Welcome, ${user}` : 'Sign in to CryptoAuth'}
+          </h2>
 
           {/* Group Coinbase and MetaMask buttons in a vertical stack */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

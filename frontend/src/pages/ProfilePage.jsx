@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "../lib/contractInfo";
 import { ethers } from "ethers";
+import logo from '../assets/CryptoAuth_Logo.png';
+import background from '../assets/Polygon_Background.png';
 
 const ProfilePage = () => {
   const { user } = useAuth();
@@ -98,13 +100,90 @@ const ProfilePage = () => {
         CryptoAuth
       </button>
 
-      <h2 style={{ marginBottom: "1rem" }}>Profile</h2>
-
       {verified ? (
-        <div>
-          <p><strong>Name:</strong> {formData.name}</p>
-          <p><strong>Email:</strong> {formData.email}</p>
-          <p><strong>Role:</strong> {metadata.attributes.find(attr => attr.trait_type === "Role")?.value}</p>
+        <div style={{
+          maxWidth: "400px",
+          margin: "0 auto",
+          border: "1px solid #ddd",
+          borderRadius: "12px",
+          overflow: "hidden",
+          boxShadow: "0 0 10px rgba(0,0,0,0.1)"
+        }}>
+          <div
+            style={{
+              backgroundImage: `url(${background})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              height: "100px",
+              position: "relative",
+            }}
+          >
+          <img
+            src={logo}
+            alt="User Avatar"
+            style={{
+              width: "80px",
+              height: "80px",
+              borderRadius: "50%",
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%) translateY(50%)",
+              border: "3px solid white",
+              objectFit: "cover",
+              backgroundColor: "#fff"
+            }}
+          />
+          </div>
+
+          <div style={{ padding: "2rem", paddingTop: "3rem", textAlign: "center" }}>
+            <h2 style={{ marginBottom: "0.25rem" }}>{formData.name}</h2>
+            <p style={{ color: "#666", marginBottom: "0.5rem" }}>
+              {user.walletAddress.slice(0, 8)}...{user.walletAddress.slice(-4)}
+            </p>
+
+            <div style={{ marginTop: "1rem", textAlign: "left" }}>
+              <h4>Contact Info</h4>
+              <p><strong>Email:</strong> {formData.email}</p>
+              <p><strong>Current Status:</strong> {metadata.attributes.find(attr => attr.trait_type === "Role")?.value}</p>
+            </div>
+
+            <div style={{ marginTop: "1.5rem", textAlign: "left" }}>
+              <h4>NFT Status</h4>
+              <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
+                <div style={{
+                  width: "80px",
+                  height: "80px",
+                  backgroundColor: "#eee",
+                  borderRadius: "6px"
+                }} />
+              </div>
+            </div>
+
+            <div style={{ marginTop: "2rem" }}>
+              <button style={{
+                backgroundColor: "#2563eb",
+                color: "white",
+                padding: "0.75rem 1.25rem",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                marginBottom: "1rem"
+              }}>
+                Request Upgrade Status
+              </button>
+              <br />
+              <button style={{
+                backgroundColor: "#f87171",
+                color: "white",
+                padding: "0.6rem 1.25rem",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer"
+              }}>
+                Delete Account
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
         <>
